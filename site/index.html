@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Crewly Waitlist</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Crewly: field service software for home service crews at half the price of Housecall Pro. Free migration, real phone support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: work-order page. A hero beside an itemized "monthly bill", then a price sheet, the founding offer, and the sign-up form as the job ticket. */
+:root {
+  --bg: #f2f4f6;
+  --surface: #ffffff;
+  --ink: #161b22;
+  --muted: #56606b;
+  --line: #d6dbe1;
+  --accent: #f2b705;      /* hi-vis amber */
+  --accent-ink: #1a1400;
+  --accent-soft: #fff4cc;
+  --strike: #a3361f;
+  --good: #1f7a4a;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius: 6px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151a; --surface: #1a2027; --ink: #e8ecf0; --muted: #9aa5b1; --line: #2c343e;
+    --accent: #f5c02a; --accent-ink: #1a1400; --accent-soft: #3a3010; --strike: #f08a70; --good: #5fcf92;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151a; --surface: #1a2027; --ink: #e8ecf0; --muted: #9aa5b1; --line: #2c343e;
+  --accent: #f5c02a; --accent-ink: #1a1400; --accent-soft: #3a3010; --strike: #f08a70; --good: #5fcf92;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--body); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.02; margin: 0; text-wrap: balance; letter-spacing: 0.005em; }
+h1 { font-size: clamp(2.6rem, 6.4vw, 4.6rem); font-weight: 800; text-transform: uppercase; }
+h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 700; text-transform: uppercase; }
+h3 { font-size: 1.35rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+p { margin: 0; }
+a { color: inherit; }
+.eyebrow { font: 600 0.78rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 48px; padding-inline: 1.4rem; border: 2px solid var(--ink); border-radius: var(--radius); background: var(--accent); color: var(--accent-ink); font: 700 1.1rem/1 var(--display); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+.btn:hover { filter: brightness(1.05); }
+.btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .copy:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* header */
+.top { border-bottom: 1px solid var(--line); background: var(--surface); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.9rem; }
+.logo { font: 800 1.7rem/1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+.logo i { display: inline-block; width: 0.9rem; height: 0.9rem; background: var(--accent); border: 2px solid var(--ink); transform: rotate(45deg); }
+.top .note { font: 500 0.8rem/1.3 var(--mono); color: var(--muted); text-align: right; }
+
+/* hero */
+.hero { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+.hero .wrap { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+.hero-copy { display: grid; gap: 1.4rem; min-width: 0; }
+.hero h1 em { font-style: normal; background: var(--accent); color: var(--accent-ink); padding: 0 0.15em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.lede { font-size: 1.15rem; color: var(--muted); max-width: 34em; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+.hero-actions span { font-size: 0.92rem; color: var(--muted); }
+
+/* the bill */
+.bill { background: var(--surface); border: 2px solid var(--ink); border-radius: var(--radius); padding: 1.4rem 1.4rem 1.2rem; min-width: 0; box-shadow: 8px 8px 0 var(--accent); }
+.bill-head { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 2px dashed var(--line); padding-bottom: 0.8rem; margin-bottom: 0.8rem; }
+.bill-head b { font: 700 1.25rem/1.1 var(--display); text-transform: uppercase; letter-spacing: 0.03em; }
+.bill-row { display: flex; justify-content: space-between; gap: 1rem; padding-block: 0.45rem; font-size: 0.98rem; }
+.bill-row .mono { white-space: nowrap; }
+.bill-row.old .mono { color: var(--strike); text-decoration: line-through; text-decoration-thickness: 2px; }
+.bill-row.new { font-weight: 600; }
+.bill-total { margin-top: 0.7rem; padding-top: 0.8rem; border-top: 2px solid var(--ink); display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.bill-total .mono { font-size: 1.6rem; font-weight: 600; color: var(--good); }
+.bill small { display: block; margin-top: 0.8rem; color: var(--muted); font-size: 0.78rem; }
+
+/* sections */
+section.band { padding-block: clamp(2.5rem, 6vw, 4rem); border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 0.7rem; margin-bottom: 1.8rem; max-width: 46em; }
+.sec-head p { color: var(--muted); }
+
+/* price sheet */
+.table-scroll { overflow-x: auto; border: 2px solid var(--ink); border-radius: var(--radius); background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 640px; }
+th, td { padding: 0.95rem 1rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { font: 600 0.75rem/1.2 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+tbody tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.hcp { color: var(--muted); }
+td.crewly { font-weight: 600; background: var(--accent-soft); }
+td .per { display: block; font: 400 0.8rem/1.3 var(--body); color: var(--muted); }
+.plan-name + .per { display: none; }
+.plan-name { font: 700 1.2rem/1 var(--display); text-transform: uppercase; letter-spacing: 0.03em; }
+.fine { margin-top: 0.9rem; font-size: 0.82rem; color: var(--muted); }
+
+/* reasons */
+.reasons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.reason { display: grid; gap: 0.6rem; align-content: start; padding-top: 1rem; border-top: 4px solid var(--accent); min-width: 0; }
+.reason p { color: var(--muted); }
+
+/* founding offer + form */
+.signup .wrap { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(2rem, 5vw, 3.5rem); align-items: start; }
+.offer { display: grid; gap: 1.2rem; min-width: 0; }
+.offer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.9rem; }
+.offer li { display: grid; grid-template-columns: 1.6rem 1fr; gap: 0.6rem; }
+.offer li::before { content: ""; width: 1.1rem; height: 1.1rem; margin-top: 0.25rem; border: 2px solid var(--ink); background: var(--accent); border-radius: 3px; }
+.offer li b { display: block; }
+.offer li span { color: var(--muted); }
+
+.ticket { background: var(--surface); border: 2px solid var(--ink); border-radius: var(--radius); min-width: 0; }
+.ticket-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.9rem 1.3rem; border-bottom: 2px solid var(--ink); background: var(--accent); color: var(--accent-ink); }
+.ticket-head b { font: 800 1.35rem/1 var(--display); text-transform: uppercase; letter-spacing: 0.04em; }
+.ticket-head .mono { font-size: 0.8rem; }
+form { display: grid; gap: 1rem; padding: 1.3rem; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.field { display: grid; gap: 0.35rem; min-width: 0; }
+label { font: 600 0.78rem/1.2 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+label .opt { text-transform: none; letter-spacing: 0; font-weight: 400; }
+input, select, textarea { width: 100%; min-height: 46px; padding: 0.65rem 0.8rem; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--ink); font: 400 1rem/1.4 var(--body); }
+textarea { min-height: 92px; resize: vertical; }
+input:hover, select:hover, textarea:hover { border-color: var(--muted); }
+.check { display: grid; grid-template-columns: 1.4rem 1fr; gap: 0.6rem; align-items: start; font: 400 0.85rem/1.45 var(--body); letter-spacing: 0; text-transform: none; color: var(--muted); }
+.check input { min-height: 0; width: 1.15rem; height: 1.15rem; margin-top: 0.15rem; accent-color: var(--accent); }
+.err { color: var(--strike); font-size: 0.9rem; min-height: 1.2em; }
+form .btn { width: 100%; }
+
+.done { padding: 1.5rem 1.3rem; display: grid; gap: 1rem; }
+.done h3 { font-size: 1.8rem; }
+.done p { color: var(--muted); }
+.ref { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.ref input { flex: 1 1 220px; font-family: var(--mono); font-size: 0.9rem; }
+.copy { min-height: 46px; padding-inline: 1rem; border: 2px solid var(--ink); border-radius: var(--radius); background: var(--surface); color: var(--ink); font: 700 1rem/1 var(--display); letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; }
+.preview-note { font: 400 0.8rem/1.4 var(--mono); color: var(--muted); border: 1px dashed var(--line); padding: 0.6rem 0.8rem; border-radius: var(--radius); }
+
+/* faq */
+.faq { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2.5rem; }
+details { border-bottom: 1px solid var(--line); padding-block: 1rem; }
+summary { cursor: pointer; font: 700 1.25rem/1.2 var(--display); text-transform: uppercase; letter-spacing: 0.02em; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-family: var(--mono); color: var(--muted); }
+details[open] summary::after { content: "–"; }
+details p { margin-top: 0.6rem; color: var(--muted); max-width: 36em; }
+
+footer { border-top: 1px solid var(--line); padding-block: 1.6rem; color: var(--muted); font-size: 0.85rem; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.8rem; }
+
+@media (max-width: 860px) {
+  .hero .wrap, .signup .wrap { grid-template-columns: 1fr; }
+  .reasons { grid-template-columns: 1fr; }
+  .faq { grid-template-columns: 1fr; }
+  .bill { box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }
+}
+@media (max-width: 520px) {
+  .row { grid-template-columns: 1fr; }
+  .top .note { display: none; }
+  table { min-width: 0; }
+  th, td { padding: 0.8rem 0.6rem; }
+  .col-users { display: none; }
+  .plan-name + .per { display: block; font-size: 0.8rem; color: var(--muted); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn, .copy { transition: transform 0.12s ease, filter 0.12s ease; }
+  .btn:active, .copy:active { transform: translate(2px, 2px); }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#join"><i aria-hidden="true"></i>Crewly</a>
+    <p class="note">Founding list open · first 100 shops</p>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">Field service software for home service crews</p>
+        <h1>Everything you use in Housecall Pro. <em>Half the price.</em></h1>
+        <p class="lede">Scheduling, dispatch, estimates and invoicing for HVAC, plumbing, electrical and cleaning crews. Every plan costs half of what Housecall Pro charges, a real person answers the phone, and we move your data over for free.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#join">Save my founding spot</a>
+          <span>Free to join. No card needed.</span>
+        </div>
+      </div>
+
+      <aside class="bill" aria-label="Monthly software bill comparison for a 5-person crew">
+        <div class="bill-head">
+          <b>Monthly software bill</b>
+          <span class="mono eyebrow">5-person crew</span>
+        </div>
+        <div class="bill-row old"><span>Housecall Pro Essentials</span><span class="mono">$189.00</span></div>
+        <div class="bill-row new"><span>Crewly Essentials</span><span class="mono">$94.00</span></div>
+        <div class="bill-row"><span>Data migration</span><span class="mono">$0.00</span></div>
+        <div class="bill-total"><span>You keep, per year</span><span class="mono">$1,140</span></div>
+        <small>Monthly billing. Housecall Pro list price from housecallpro.com, Nov 2026.</small>
+      </aside>
+    </div>
+  </section>
+
+  <section class="band" id="pricing">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Price sheet</p>
+        <h2>Same tiers. Half the bill.</h2>
+        <p>Crewly matches Housecall Pro's plans seat for seat and charges half, on monthly and yearly billing.</p>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th scope="col">Plan</th><th scope="col" class="col-users">Users included</th><th scope="col">Housecall Pro</th><th scope="col">Crewly</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="plan-name">Basic</span><span class="per">1 user</span></td><td class="num col-users">1</td><td class="num hcp">$79/mo<span class="per">$59/mo billed yearly</span></td><td class="num crewly">$39/mo<span class="per">$29/mo billed yearly</span></td></tr>
+            <tr><td><span class="plan-name">Essentials</span><span class="per">5 users</span></td><td class="num col-users">5</td><td class="num hcp">$189/mo<span class="per">$149/mo billed yearly</span></td><td class="num crewly">$94/mo<span class="per">$74/mo billed yearly</span></td></tr>
+            <tr><td><span class="plan-name">Max</span><span class="per">8 users</span></td><td class="num col-users">8</td><td class="num hcp">$329/mo<span class="per">$299/mo billed yearly</span></td><td class="num crewly">$164/mo<span class="per">$149/mo billed yearly</span></td></tr>
+            <tr><td><span class="plan-name">Extra user</span></td><td class="num col-users">+1</td><td class="num hcp">$35/mo</td><td class="num crewly">$17/mo</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="fine">Housecall Pro prices are its published list prices as of November 2026. Crewly prices apply at launch. Founding members lock theirs in for life.</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Why shops switch</p>
+        <h2>Built around the complaints we hear most</h2>
+      </div>
+      <div class="reasons">
+        <div class="reason">
+          <h3>A person on the phone</h3>
+          <p>Call and talk to someone who knows the product. No chatbot loop, no handoff to a new agent halfway through your problem.</p>
+        </div>
+        <div class="reason">
+          <h3>We do the move</h3>
+          <p>Send us your Housecall Pro export. We bring over your customers, job history and price book, and check it with you before you switch.</p>
+        </div>
+        <div class="reason">
+          <h3>A price that stays put</h3>
+          <p>Founding members keep their launch price for as long as they stay. Adding a tech costs $17, not $35.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band signup" id="join">
+    <div class="wrap">
+      <div class="offer">
+        <p class="eyebrow">Founding member offer</p>
+        <h2>The first 100 shops get</h2>
+        <ul>
+          <li><div><b>Launch price, locked for life</b><span>Half of Housecall Pro today, and it stays that way.</span></div></li>
+          <li><div><b>Free migration from Housecall Pro</b><span>We move your data and check it with you.</span></div></li>
+          <li><div><b>The founder's direct line</b><span>Text or call when something breaks.</span></div></li>
+          <li><div><b>A vote on what we build next</b><span>Tell us what slows your crew down and we put it on the list.</span></div></li>
+        </ul>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-head"><b>Work order: join the list</b><span class="mono">No. <span id="wo-no">0001</span></span></div>
+
+        <form id="waitlist" novalidate>
+          <div class="row">
+            <div class="field"><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required placeholder="Mike Torres"></div>
+            <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="mike@torresplumbing.com"></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="company">Company</label><input id="company" name="company" autocomplete="organization" required placeholder="Torres Plumbing & Drain"></div>
+            <div class="field"><label for="techs">Techs in the field</label>
+              <select id="techs" name="techs" required>
+                <option value="">Choose</option><option>Just me</option><option>2–5</option><option>6–10</option><option>11–25</option><option>26+</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label for="software">What do you use today?</label>
+            <select id="software" name="software" required>
+              <option value="">Choose</option><option>Housecall Pro</option><option>Jobber</option><option>ServiceTitan</option><option>Workiz</option><option>Paper or spreadsheets</option><option>Something else</option>
+            </select>
+          </div>
+          <div class="field"><label for="pain">What bugs you most about it? <span class="opt">(optional)</span></label>
+            <textarea id="pain" name="pain" placeholder="Support takes days, the price keeps going up, invoices are hard to change..."></textarea>
+          </div>
+          <div class="field"><label for="phone">Mobile number <span class="opt">(optional, for launch texts)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(555) 123-4567"></div>
+          <label class="check" for="sms"><input id="sms" name="sms_consent" type="checkbox" value="yes"><span>Text me Crewly launch updates at the number above. Up to 4 messages a month. Message and data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of joining.</span></label>
+          <p class="err" id="err" role="alert"></p>
+          <button class="btn" type="submit" id="submit">Save my founding spot</button>
+        </form>
+
+        <div class="done" id="done" hidden>
+          <h3>You're on the list</h3>
+          <p>We'll email <b id="done-email"></b> when your founding spot opens. Want to move up? Share your link with another shop owner. Each shop that joins through it moves you closer to the front.</p>
+          <div class="ref">
+            <input id="ref-link" readonly aria-label="Your referral link">
+            <button class="copy" type="button" id="copy">Copy</button>
+          </div>
+          <p class="preview-note" id="preview-note" hidden>Preview mode: this sign-up was not saved. Set FORM_ENDPOINT in the page script to start collecting sign-ups.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Questions</p><h2>Before you join</h2></div>
+      <div class="faq">
+        <details><summary>Is it really half the price?</summary><p>Yes. Every Crewly plan costs half of the matching Housecall Pro plan, with the same number of users included. Extra users cost $17 a month instead of $35.</p></details>
+        <details><summary>How does the free migration work?</summary><p>You export your customers, jobs and price book from Housecall Pro. We import them into Crewly, then walk through the result with you before you cancel anything.</p></details>
+        <details><summary>Does joining cost anything?</summary><p>No. The waitlist is free and needs no card. You decide whether to sign up when your spot opens.</p></details>
+        <details><summary>When can my crew start?</summary><p>We are onboarding founding members in small groups so each shop gets a proper migration. We'll email you when your group opens.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Crewly · usecrewly.com</span>
+    <span>Housecall Pro is a trademark of its owner. Crewly is not affiliated with Housecall Pro.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Where sign-ups go. Paste a Formspree form URL (https://formspree.io/f/xxxx)
+  // or a Loops form URL (https://app.loops.so/api/newsletter-form/xxxx).
+  // Left empty, the form runs in preview mode and saves nothing.
+  var FORM_ENDPOINT = "";
+
+  var form = document.getElementById("waitlist");
+  var err = document.getElementById("err");
+  var btn = document.getElementById("submit");
+  var refFrom = "";
+  try { refFrom = new URLSearchParams(location.search).get("ref") || ""; } catch (e) {}
+
+  var woNo = String(Math.floor(1000 + Math.random() * 9000));
+  document.getElementById("wo-no").textContent = woNo;
+
+  function code() {
+    var a = "abcdefghjkmnpqrstuvwxyz23456789", s = "";
+    for (var i = 0; i < 6; i++) s += a[Math.floor(Math.random() * a.length)];
+    return s;
+  }
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    err.textContent = "";
+    var data = new FormData(form);
+    var email = (data.get("email") || "").trim();
+    var missing = [];
+    if (!(data.get("name") || "").trim()) missing.push("your name");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) missing.push("a valid email");
+    if (!(data.get("company") || "").trim()) missing.push("your company");
+    if (!data.get("techs")) missing.push("how many techs you run");
+    if (!data.get("software")) missing.push("what you use today");
+    if (data.get("sms_consent") && !(data.get("phone") || "").trim()) missing.push("a mobile number for texts");
+    if (missing.length) { err.textContent = "Please add " + missing.join(", ") + "."; return; }
+
+    var myCode = code();
+    data.set("email", email);
+    data.set("referral_code", myCode);
+    data.set("referred_by", refFrom);
+    data.set("source", "waitlist");
+    if (!data.get("sms_consent")) data.set("sms_consent", "no");
+
+    var done = function (saved) {
+      form.hidden = true;
+      document.getElementById("done").hidden = false;
+      document.getElementById("done-email").textContent = email;
+      var base = (location.protocol.indexOf("http") === 0 && location.hostname.indexOf("claude") === -1) ? location.origin + location.pathname : "https://usecrewly.com/";
+      document.getElementById("ref-link").value = base + "?ref=" + myCode;
+      document.getElementById("preview-note").hidden = saved;
+    };
+
+    if (!FORM_ENDPOINT) { done(false); return; }
+    btn.disabled = true; btn.textContent = "Saving...";
+    fetch(FORM_ENDPOINT, { method: "POST", body: new URLSearchParams(data), headers: { "Accept": "application/json" } })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); done(true); })
+      .catch(function () {
+        btn.disabled = false; btn.textContent = "Save my founding spot";
+        err.textContent = "We couldn't save your spot. Check your connection and try again.";
+      });
+  });
+
+  document.getElementById("copy").addEventListener("click", function () {
+    var input = document.getElementById("ref-link");
+    var b = this;
+    var ok = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1800); };
+    try {
+      navigator.clipboard.writeText(input.value).then(ok, function () { input.select(); });
+    } catch (e) { input.select(); }
+  });
+})();
+</script>
+</body>
+</html>
