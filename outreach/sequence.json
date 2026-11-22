@@ -1,0 +1,49 @@
+{
+  "_note": "Crewly cold email sequence for current Housecall Pro users. {{companyName}}, {{industry}} and {{website}} come from leads/instantly-import.csv. {{sendingAccountFirstName}} is filled by Instantly from the sending inbox. Replace POSTAL_ADDRESS before launch (CAN-SPAM requires a real postal address).",
+  "campaign_name": "Crewly - HCP users - wave 1",
+  "steps": [
+    {
+      "delay_days_after": 3,
+      "variants": [
+        {
+          "label": "A - booking page",
+          "subject": "{{companyName}}'s booking page",
+          "body": "Hi {{companyName}} team,\n\nI noticed you take online bookings through Housecall Pro.\n\nI'm building Crewly, a Housecall Pro alternative for {{industry}} shops. It has the same plans at half the price. Essentials is $94/mo instead of $189. A real person answers the phone, and we move your customers, jobs and price book over for free.\n\nThe first 100 shops lock in that price for life. Want me to save you a spot?\n\n{{sendingAccountFirstName}}\nFounder, Crewly\nPOSTAL_ADDRESS\n\nNot for you? Reply \"no\" and I won't email again."
+        },
+        {
+          "label": "B - the math",
+          "subject": "half of your Housecall Pro bill",
+          "body": "Hi {{companyName}} team,\n\nQuick math for a 5-person crew: Housecall Pro Essentials is $189/mo. Crewly Essentials is $94/mo. That's $1,140 a year back in your pocket for the same scheduling, dispatch, estimates and invoicing.\n\nWe're opening Crewly to 100 founding shops. They get free migration from Housecall Pro, the founder's direct line, and the launch price locked for life.\n\nWorth a look for {{companyName}}?\n\n{{sendingAccountFirstName}}\nFounder, Crewly\nPOSTAL_ADDRESS\n\nNot for you? Reply \"no\" and I won't email again."
+        }
+      ]
+    },
+    {
+      "delay_days_after": 4,
+      "variants": [
+        {
+          "label": "follow-up 1",
+          "subject": "",
+          "body": "Quick question: what would make switching off Housecall Pro worth it for you? Price, support, invoicing, something else?\n\nEven a one-word reply helps me build the right thing.\n\n{{sendingAccountFirstName}}"
+        }
+      ]
+    },
+    {
+      "delay_days_after": 0,
+      "variants": [
+        {
+          "label": "follow-up 2 (last)",
+          "subject": "",
+          "body": "Last note from me. If the timing is ever right, the founding list is at usecrewly.com. Founding pricing holds for the first 100 shops.\n\nGood luck this season.\n\n{{sendingAccountFirstName}}\nCrewly, POSTAL_ADDRESS"
+        }
+      ]
+    }
+  ],
+  "schedule": {
+    "timezone": "America/Chicago",
+    "from": "07:00",
+    "to": "10:30",
+    "days": ["tue", "wed", "thu"]
+  },
+  "daily_limit": 30,
+  "stop_on_reply": true
+}
