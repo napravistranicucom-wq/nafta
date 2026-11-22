@@ -11,7 +11,7 @@
 
 ## B. Instantly (ti, pa ja)
 1. **Instantly** (instantly.ai), plan Growth ~37 $/mj.
-2. **Inboxi za slanje:** Instantly → Email Accounts → **Done-for-you**. Uzmi 2–3 domene koje liče na brend (npr. `getcrewly.com`, `trycrewly.com`; provjeri jesu li slobodne) s 2 inboxa po domeni. **Nikad ne šalji s `usecrewly.com`.**
+2. **Inboxi za slanje:** Instantly → Email Accounts → **Done-for-you**. Uzmi 2–3 domene koje liče na brend (slobodne su `gocrewly.com` i `hellocrewly.com`, provjereno 22. 11. 2026.) s 2 inboxa po domeni. **Nikad ne šalji s `usecrewly.com`.**
 3. Uključi **warmup** na svim inboxima i čekaj **2 tjedna** prije slanja.
 4. U `outreach/sequence.json` zamijeni `POSTAL_ADDRESS` stvarnom poštanskom adresom. To traži američki zakon CAN-SPAM. Može i virtualni poštanski sandučić (npr. iPostal1, ~10 $/mj).
 5. Instantly → Settings → Integrations → **API Keys** → napravi ključ (API v2). Reci mi kad je spreman: dobit ćeš sigurnu formu u koju ga upišeš, a ja ga ne vidim.
