@@ -1,0 +1,20 @@
+{
+  "_source": "Confirmed from https://online-booking.housecallpro.com/script.js (fetched 2026-11-22). The widget reads .hcp-button[data-orgname][data-token] or script ?token=&orgName= and opens https://book.housecallpro.com/book/<orgName>/<token>.",
+  "strong": [
+    "online-booking.housecallpro.com/script.js",
+    "book.housecallpro.com/book/",
+    "book.housecallpro.com/lead-form/",
+    "housecallpro.com/book/",
+    "class=\"hcp-button\"",
+    "data-orgname=",
+    "hcp-widget",
+    "hcp-iframe"
+  ],
+  "weak": [
+    "client.housecallpro.com",
+    "pro.housecallpro.com",
+    "Powered by Housecall Pro",
+    "housecallpro.com"
+  ],
+  "token_regex": "(?:book|lead-form)/[^/\"'?]+/([0-9a-f]{32})|data-token=[\"']([0-9a-f]{32})|[?&]token=([0-9a-f]{32})"
+}
